@@ -8,16 +8,20 @@ RUN apt-get update -y \
 RUN git clone --depth 1 --branch wine-${WINE_VERSION} https://github.com/wine-mirror/wine /wine-source \
     && cd /wine-source \
     && wget https://raw.githubusercontent.com/castaneai/winepatches/main/0001-winex11.drv-Support-child-window-rendering-for-Vulka.patch \
-    && git apply *.patch \
-    && mkdir -p /wine64-build \
+    && git apply *.patch
+RUN mkdir -p /wine64-build \
     && cd /wine64-build \
     && /wine-source/configure --enable-win64 \
-    && make -j16 \
-    && make install \
-    && mkdir -p /wine32-build \
+    && make -j16
+RUN mkdir -p /wine32-build \
     && cd /wine32-build \
     && PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig /wine-source/configure --with-wine64=/wine64-build \
-    && make -j16 \
+    && make -j16 
+# > If you do choose to install your WoW64 build, you should run make install in the 32-bit build tree first, then in the 64-bit one. 
+# https://wiki.winehq.org/Building_Wine#Shared_WoW64
+RUN cd /wine32-build \
+    && make install \
+    && cd /wine64-build \
     && make install
 
 FROM ${BASE_IMAGE}

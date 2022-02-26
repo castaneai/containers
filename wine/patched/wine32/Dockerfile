@@ -8,8 +8,8 @@ RUN apt-get update -y \
 RUN git clone --depth 1 --branch wine-${WINE_VERSION} https://github.com/wine-mirror/wine /wine-source \
     && cd /wine-source \
     && wget https://raw.githubusercontent.com/castaneai/winepatches/main/0001-winex11.drv-Support-child-window-rendering-for-Vulka.patch \
-    && git apply *.patch \
-    && mkdir -p /wine32-build \
+    && git apply *.patch
+RUN mkdir -p /wine32-build \
     && cd /wine32-build \
     && PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig /wine-source/configure \
     && make -j16 \
