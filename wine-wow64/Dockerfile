@@ -6,7 +6,7 @@ ARG WINE_VERSION
 RUN apt-get update -y \
     && apt-get install -y git wget
 RUN git clone --depth 1 --branch wine-${WINE_VERSION} https://gitlab.winehq.org/wine/wine.git /wine-source \
-    && cd /wine-source \
+    && cd /wine-source
 RUN mkdir -p /wine-build \
     && cd /wine-build \
     && /wine-source/configure --with-gstreamer --enable-archs=x86_64,i386 \
@@ -18,14 +18,14 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update -y \
     && apt-get update -y \
 	&& apt-get install -y \
-    libasound2 libasound2-plugins libc6 libfaudio0 libglib2.0-0 libgphoto2-6 libgphoto2-port12 libgstreamer-plugins-base1.0-0 libgstreamer1.0-0 \
+    libc6 libfaudio0 libglib2.0-0 libgphoto2-6 libgphoto2-port12 libgstreamer-plugins-base1.0-0 libgstreamer1.0-0 \
     libcap2-bin libcapi20-3 libcups2 libdbus-1-3 \
-    liblcms2-2 libldap-2.4-2 libmpg123-0 \
+    liblcms2-2 libmpg123-0 \
     libopenal1 libpcap0.8 libpulse0 libudev1 \
     libusb-1.0-0 libx11-6 libxml2 libopencl1 libasound2-plugins libncurses6 \
     libfontconfig1 libfreetype6 libglu1-mesa libgnutls30 libgsm1 \
-    libjpeg8 libosmesa6 libpng16-16 libsdl2-2.0-0 libtiff5 libv4l-0 \
-    libxcomposite1 libxcursor1 libxfixes3 libxi6 libxrandr2 libxrender1 libxslt1.1 \
+    libjpeg8 libosmesa6 libpng16-16 libsdl2-2.0-0 libtiff6 libv4l-0 \
+    libxcomposite1 libxcursor1 libxfixes3 libxi6 libxrandr2 libxrender1 libxslt1.1 libvulkan1 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
