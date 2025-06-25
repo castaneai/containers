@@ -1,7 +1,7 @@
 # https://github.com/moby/moby/issues/38379
-ARG BASE_IMAGE
+ARG BASE_IMAGE=ubuntu:24.04
 
-FROM ghcr.io/castaneai/winebuilder:wow64 as builder
+FROM ghcr.io/castaneai/winebuilder:wow64 AS builder
 ARG WINE_VERSION
 RUN apt-get update -y \
     && apt-get install -y git wget
@@ -14,7 +14,7 @@ RUN mkdir -p /wine-build \
     && make install
 
 FROM ${BASE_IMAGE}
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y \
     && apt-get update -y \
 	&& apt-get install -y \
@@ -25,7 +25,7 @@ RUN apt-get update -y \
     libusb-1.0-0 libx11-6 libxml2 libopencl1 libasound2-plugins libncurses6 \
     libfontconfig1 libfreetype6 libglu1-mesa libgnutls30 libgsm1 \
     libjpeg8 libosmesa6 libpng16-16 libsdl2-2.0-0 libtiff6 libv4l-0 \
-    libxcomposite1 libxcursor1 libxfixes3 libxi6 libxrandr2 libxrender1 libxslt1.1 libvulkan1 \
+    libxcomposite1 libxcursor1 libxfixes3 libxi6 libxrandr2 libxrender1 libxslt1.1 libgl1 libegl-mesa0 libvulkan1 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -33,3 +33,4 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 COPY --from=builder /usr/local/include/wine /usr/local/include/wine
 COPY --from=builder /usr/local/lib/wine /usr/local/lib/wine
 COPY --from=builder /usr/local/share/wine /usr/local/share/wine
+
