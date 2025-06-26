@@ -12,6 +12,8 @@ RUN mkdir -p /wine-build \
     && /wine-source/configure --with-gstreamer --enable-archs=x86_64,i386 \
     && make -j16 \
     && make install
+RUN i686-w64-mingw32-strip --strip-unneeded /usr/local/lib/wine/i386-windows/*.dll
+RUN x86_64-w64-mingw32-strip --strip-unneeded /usr/local/lib/wine/x86_64-windows/*.dll
 
 FROM ${BASE_IMAGE}
 ENV DEBIAN_FRONTEND=noninteractive
@@ -24,11 +26,13 @@ RUN apt-get update -y \
     libopenal1 libpcap0.8 libpulse0 libudev1 \
     libusb-1.0-0 libx11-6 libxml2 libopencl1 libasound2-plugins libncurses6 \
     libfontconfig1 libfreetype6 libglu1-mesa libgnutls30 libgsm1 \
-    libjpeg8 libosmesa6 libpng16-16 libsdl2-2.0-0 libtiff6 libv4l-0 \
-    libxcomposite1 libxcursor1 libxfixes3 libxi6 libxrandr2 libxrender1 libxslt1.1 libgl1 libegl-mesa0 libvulkan1 \
-    wget locales tzdata winetricks \
+    libjpeg8 libpng16-16 libsdl2-2.0-0 libtiff6 libv4l-0 \
+    libxcomposite1 libxcursor1 libxfixes3 libxi6 libxrandr2 libxrender1 libxslt1.1 libgl1 \
+    wget locales tzdata \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && wget -O /usr/bin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
+    && chmod +x /usr/bin/winetricks
 RUN locale-gen ja_JP.UTF-8
 
 RUN apt-get update -y \
