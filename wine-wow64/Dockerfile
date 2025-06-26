@@ -17,7 +17,7 @@ FROM ${BASE_IMAGE}
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y \
     && apt-get update -y \
-	&& apt-get install -y \
+    && apt-get install -y \
     libc6 libfaudio0 libglib2.0-0 libgphoto2-6 libgphoto2-port12 libgstreamer-plugins-base1.0-0 libgstreamer1.0-0 \
     libcap2-bin libcapi20-3 libcups2 libdbus-1-3 \
     liblcms2-2 libmpg123-0 \
@@ -26,6 +26,13 @@ RUN apt-get update -y \
     libfontconfig1 libfreetype6 libglu1-mesa libgnutls30 libgsm1 \
     libjpeg8 libosmesa6 libpng16-16 libsdl2-2.0-0 libtiff6 libv4l-0 \
     libxcomposite1 libxcursor1 libxfixes3 libxi6 libxrandr2 libxrender1 libxslt1.1 libgl1 libegl-mesa0 libvulkan1 \
+    wget locales tzdata winetricks \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+RUN locale-gen ja_JP.UTF-8
+
+RUN apt-get update -y \
+    && apt-get install -y gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -33,4 +40,3 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 COPY --from=builder /usr/local/include/wine /usr/local/include/wine
 COPY --from=builder /usr/local/lib/wine /usr/local/lib/wine
 COPY --from=builder /usr/local/share/wine /usr/local/share/wine
-
